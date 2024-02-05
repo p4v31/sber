@@ -18,6 +18,7 @@ ssh-copy-id имя_пользователя_на_удаленной_машине
 4. Проверим работу Ansible
 ```
 ansible all -i inventory.ini -m ping
+```
 5. Чтобы работать дальше без sudo с Docker выполним на 2 ВМ:
 ```
 sudo groupadd docker
