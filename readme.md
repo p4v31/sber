@@ -18,8 +18,13 @@ ssh-copy-id имя_пользователя_на_удаленной_машине
 4. Проверим работу Ansible
 ```
 ansible all -i inventory.ini -m ping
+5. Чтобы работать дальше без sudo с Docker выполним на 2 ВМ:
 ```
-5. Запускаем playbook
+sudo groupadd docker
+sudo usermod -aG docker $USER
+newgrp docker
+```
+6. Запускаем playbook
 ```
 ansible-playbook -i inventory.ini  playbook.yml --ask-become-pass
 ```
