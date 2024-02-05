@@ -1,0 +1,79 @@
+- name: Install all
+  hosts: sber2
+  become: yes
+  tasks:
+    - name: Download Docker installation script
+      get_url:
+        url: https://get.docker.com
+        dest: ./install-docker.sh
+        mode: '0755'
+
+    - name: Install Docker via script
+      ansible.builtin.command: sh ./install-docker.sh
+      args:
+        creates: /usr/bin/docker
+
+    - name: Install Minikube
+      get_url:
+        url: https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+        dest: /usr/local/bin/minikube
+        mode: '0755'
+
+    - name: Delete existing Minikube cluster
+      command: minikube delete
+      ignore_errors: yes
+
+    - name: Start Minikube
+      command: minikube start --driver=docker
+      become: no
+
+    - name: Получение URL последней версии kubectl
+      ansible.builtin.shell: curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt
+      register: kubectl_version
+      changed_when: false
+
+    - name: Скачивание и установка kubectl
+      ansible.builtin.get_url:
+        url: "https://storage.googleapis.com/kubernetes-release/release/{{ kubectl_version.stdout }}/bin/linux/amd64/kubectl"
+        dest: "/usr/local/bin/kubectl"
+        mode: '0755'
+      become: yes
+
+    - name: Minikube context
+      command: kubectl config use-context minikube
+      become: no
+
+    - name: Download Helm installation script
+      get_url:
+        url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+        dest: ./get_helm.sh
+        mode: '0755'
+
+    - name: Install Helm
+      command: bash ./get_helm.sh
+
+    - name: Clone Jenkins setup from Git
+      ansible.builtin.git:
+        repo: 'https://github.com/p4v31/kubernetes-jenkins'
+        dest: ./kubernetes-jenkins
+
+    - name: Create devops-tools namespace
+      command: kubectl create namespace devops-tools
+      environment:
+        KUBECONFIG: "~/.kube/config"
+
+    - name: Apply Jenkins YAMLs
+      command: kubectl apply -f {{ item }} -n devops-tools
+      loop:
+        - serviceAccount.yaml
+        - volume.yaml
+        - deployment.yaml
+        - service.yaml
+        - role.yaml
+        - rolebinding.yaml
+      loop_control:
+        loop_var: item
+      args:
+        chdir: ./kubernetes-jenkins
+      environment:
+        KUBECONFIG: "~/.kube/config"
