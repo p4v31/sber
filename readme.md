@@ -63,6 +63,14 @@ kubectl exec -it <здесь ваш под> cat /var/jenkins_home/secrets/initia
 
 # А также прикладываю свой pdf с прошлгоднего тестового задания, где я настраиваю все более подробно. Он демонистриурет то, как я подгатавливаю ВМ и докуменитрую это более подробно.
 
+# Немного скриншотов работы:
+![image](https://github.com/p4v31/sber/assets/90404785/b113025f-719b-4234-a935-864e68f01116)
+![image](https://github.com/p4v31/sber/assets/90404785/05747b9b-144f-473f-b8d9-b90cfe126e88)
+![image](https://github.com/p4v31/sber/assets/90404785/3f6f963c-a7f7-4a51-b1d7-6b9e6c8c93d9)
+
+
+
+
 
 
 
