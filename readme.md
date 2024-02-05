@@ -4,6 +4,7 @@
 - sber2: на которой и происходил весь движ.
 
 Чтобы это работало на другой конфигурации, то нужно:
+0. Склонировать репозиторий
 1. Перейти в папку ansible и в ansible.cfg изменить remote_user на нужного, в inventory.ini изменить под себя iP.
 2. Запустить скрипт impreparehost.sh, который установит все необходимое на хосте, откуда будем запускать Ansible.
 3. Обменяться ssh ключами с другим хостом.
@@ -27,7 +28,7 @@ newgrp docker
 ```
 6. Запускаем playbook
 ```
-ansible-playbook -i inventory.ini  playbook.yml --ask-become-pass
+ansible-playbook -i inventory.ini  playbook.yaml --ask-become-pass
 ```
 
 # Localhost instead 2 VM
