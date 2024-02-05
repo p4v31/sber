@@ -27,6 +27,7 @@ sudo usermod -aG docker $USER
 newgrp docker
 ```
 6. Запускаем playbook
+НО! перед этим заходим в playbook.yaml и меняем путь KUBECONFIG до, того где он лежит у Вас.
 ```
 ansible-playbook -i inventory.ini  playbook.yaml --ask-become-pass
 ```
